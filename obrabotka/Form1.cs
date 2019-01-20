@@ -482,7 +482,7 @@ namespace obrabotka
                     {
                         for (int m = -p; m < p; m++)
                         {
-                            if ((i + k) > p && (j + m) > p)
+                            if ((i + k) > p && (j + m) > p && (j + m) < BasicImage.Image.Height && (i + k) < BasicImage.Image.Width)
                             {
                                 if (image_mass[i + k, j + m] > max)
                                 {

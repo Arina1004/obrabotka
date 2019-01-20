@@ -68,10 +68,10 @@
             // 
             // newImage
             // 
-            this.newImage.Location = new System.Drawing.Point(946, 17);
+            this.newImage.Location = new System.Drawing.Point(905, 17);
             this.newImage.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.newImage.Name = "newImage";
-            this.newImage.Size = new System.Drawing.Size(698, 444);
+            this.newImage.Size = new System.Drawing.Size(640, 440);
             this.newImage.TabIndex = 1;
             this.newImage.TabStop = false;
             // 
@@ -253,7 +253,7 @@
             0,
             0});
             this.numericUpDown1.Minimum = new decimal(new int[] {
-            1,
+            3,
             0,
             0,
             0});
@@ -261,7 +261,7 @@
             this.numericUpDown1.Size = new System.Drawing.Size(52, 23);
             this.numericUpDown1.TabIndex = 22;
             this.numericUpDown1.Value = new decimal(new int[] {
-            1,
+            3,
             0,
             0,
             0});
@@ -299,7 +299,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LavenderBlush;
-            this.ClientSize = new System.Drawing.Size(1681, 676);
+            this.ClientSize = new System.Drawing.Size(1571, 676);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numericUpDown2);
