@@ -473,21 +473,25 @@ namespace obrabotka
             int c = (int)numericUpDown2.Value;
             Bitmap new_image = new Bitmap(BasicImage.Image.Width, BasicImage.Image.Height);
             Bitmap old = (Bitmap)BasicImage.Image;
-            for (int i = p; i < BasicImage.Image.Width-p; i++)
+        
+            for (int i = 0; i < BasicImage.Image.Width; i++)
             {
-                for (int j = p; j < BasicImage.Image.Height-p; j++)
+                for (int j = 0; j < BasicImage.Image.Height; j++)
                 {
                     for (int k = -p; k < p; k++)
                     {
                         for (int m = -p; m < p; m++)
                         {
-                            if (image_mass[i+k, j + m] > max)
+                            if ((i + k) > p && (j + m) > p)
                             {
-                                max = image_mass[i + k, j + m];
-                            }
-                            if (image_mass[i + k, j + m] < min)
-                            {
-                                min = image_mass[i + k, j + m];
+                                if (image_mass[i + k, j + m] > max)
+                                {
+                                    max = image_mass[i + k, j + m];
+                                }
+                                if (image_mass[i + k, j + m] < min)
+                                {
+                                    min = image_mass[i + k, j + m];
+                                }
                             }
                         }
                     }
