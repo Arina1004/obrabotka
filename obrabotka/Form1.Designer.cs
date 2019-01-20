@@ -45,9 +45,15 @@
             this.button7 = new System.Windows.Forms.Button();
             this.adaptive_binarization = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.BasicImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.newImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PixelBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
             // 
             // BasicImage
@@ -58,6 +64,7 @@
             this.BasicImage.Size = new System.Drawing.Size(639, 440);
             this.BasicImage.TabIndex = 0;
             this.BasicImage.TabStop = false;
+            this.BasicImage.Click += new System.EventHandler(this.BasicImage_Click);
             // 
             // newImage
             // 
@@ -85,7 +92,7 @@
             // PixelBar
             // 
             this.PixelBar.LargeChange = 10;
-            this.PixelBar.Location = new System.Drawing.Point(256, 520);
+            this.PixelBar.Location = new System.Drawing.Point(244, 520);
             this.PixelBar.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.PixelBar.Maximum = 255;
             this.PixelBar.Minimum = -255;
@@ -228,16 +235,75 @@
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(210, 46);
             this.button8.TabIndex = 21;
-            this.button8.Text = "Бинаризация адавптивная";
+            this.button8.Text = "Бинаризация адаптивная";
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click_1);
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Increment = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Location = new System.Drawing.Point(23, 307);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            15,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(52, 23);
+            this.numericUpDown1.TabIndex = 22;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(97, 307);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(46, 23);
+            this.numericUpDown2.TabIndex = 23;
+            this.numericUpDown2.ValueChanged += new System.EventHandler(this.numericUpDown2_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(20, 276);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(37, 17);
+            this.label1.TabIndex = 24;
+            this.label1.Text = "mat";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(94, 276);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(53, 17);
+            this.label2.TabIndex = 25;
+            this.label2.Text = "порог";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LavenderBlush;
-            this.ClientSize = new System.Drawing.Size(1838, 727);
+            this.ClientSize = new System.Drawing.Size(1681, 676);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.numericUpDown2);
+            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.adaptive_binarization);
             this.Controls.Add(this.button7);
@@ -262,6 +328,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.BasicImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.newImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PixelBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -286,6 +354,10 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button adaptive_binarization;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

@@ -29,7 +29,7 @@ namespace obrabotka
             if (open_dialog.ShowDialog() == DialogResult.OK)
             {
                 image = new Bitmap(open_dialog.FileName);
-                Bitmap bmp = new Bitmap(image, new Size(400, 450 * image.Size.Height / image.Size.Width));
+                Bitmap bmp = new Bitmap(image, new Size(600, 440 * image.Size.Height / image.Size.Width));
                 //Bitmap bmp = new Bitmap(image, image.Size.Height , image.Size.Width);
                 image_mass = new byte[bmp.Width, bmp.Height];
                 for (int x = 0; x < bmp.Width; x++)
@@ -465,14 +465,12 @@ namespace obrabotka
 
         private void button8_Click_1(object sender, EventArgs e)
         {
-            PixelBar.Minimum = 3;
-            PixelBar.Maximum = 15;
-            PixelBar_value.Text = string.Format("Текущее значение: {0}", PixelBar.Value );
-            PixelBar.Show();
-            PixelBar_value.Show();
+                     
+            int num = (int)numericUpDown1.Value;
             int min = 255;
             int max = 0;
-            int p = (PixelBar.Value - 1) / 2;
+            int p = (num - 1) / 2;
+            int c = (int)numericUpDown2.Value;
             Bitmap new_image = new Bitmap(BasicImage.Image.Width, BasicImage.Image.Height);
             Bitmap old = (Bitmap)BasicImage.Image;
             for (int i = p; i < BasicImage.Image.Width-p; i++)
@@ -495,12 +493,32 @@ namespace obrabotka
                     }
                     min = proverka(min);
                     max = proverka(max);
-                    new_image.SetPixel(i, j, image_mass[i, j ] >= (max+min)/2+10 ? Color.Black : Color.White);
+                    new_image.SetPixel(i, j, image_mass[i, j ] >= (max+min)/2+c ? Color.Black : Color.White);
                     min = 255;
                     max = 0;
                 }
             }
             newImage.Image = new_image;
+        }
+
+        private void BasicImage_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
          
