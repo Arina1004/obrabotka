@@ -49,6 +49,10 @@
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.Rotation = new System.Windows.Forms.Button();
+            this.Scalling = new System.Windows.Forms.Button();
+            this.axis = new System.Windows.Forms.ComboBox();
+            this.ScailingConst = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.BasicImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.newImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PixelBar)).BeginInit();
@@ -65,6 +69,10 @@
             this.BasicImage.TabIndex = 0;
             this.BasicImage.TabStop = false;
             this.BasicImage.Click += new System.EventHandler(this.BasicImage_Click);
+            this.BasicImage.Paint += new System.Windows.Forms.PaintEventHandler(this.BasicImage_Paint);
+            this.BasicImage.MouseDown += new System.Windows.Forms.MouseEventHandler(this.BasicImage_MouseDown);
+            this.BasicImage.MouseMove += new System.Windows.Forms.MouseEventHandler(this.BasicImage_MouseMove);
+            this.BasicImage.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BasicImage_MouseUp);
             // 
             // newImage
             // 
@@ -294,12 +302,55 @@
             this.label2.TabIndex = 25;
             this.label2.Text = "порог";
             // 
+            // Rotation
+            // 
+            this.Rotation.Location = new System.Drawing.Point(23, 473);
+            this.Rotation.Name = "Rotation";
+            this.Rotation.Size = new System.Drawing.Size(202, 52);
+            this.Rotation.TabIndex = 31;
+            this.Rotation.Text = "Поворот";
+            this.Rotation.Click += new System.EventHandler(this.Rotation_Click);
+            // 
+            // Scalling
+            // 
+            this.Scalling.Location = new System.Drawing.Point(23, 402);
+            this.Scalling.Name = "Scalling";
+            this.Scalling.Size = new System.Drawing.Size(202, 55);
+            this.Scalling.TabIndex = 27;
+            this.Scalling.Text = "Масштабирование";
+            this.Scalling.UseVisualStyleBackColor = true;
+            this.Scalling.Click += new System.EventHandler(this.Scalling_Click);
+            // 
+            // axis
+            // 
+            this.axis.FormattingEnabled = true;
+            this.axis.Items.AddRange(new object[] {
+            "Центр",
+            "Произвольная точка"});
+            this.axis.Location = new System.Drawing.Point(284, 473);
+            this.axis.Name = "axis";
+            this.axis.Size = new System.Drawing.Size(121, 24);
+            this.axis.TabIndex = 30;
+            this.axis.SelectedIndexChanged += new System.EventHandler(this.axis_SelectedIndexChanged);
+            // 
+            // ScailingConst
+            // 
+            this.ScailingConst.Location = new System.Drawing.Point(440, 473);
+            this.ScailingConst.Margin = new System.Windows.Forms.Padding(4);
+            this.ScailingConst.Name = "ScailingConst";
+            this.ScailingConst.Size = new System.Drawing.Size(132, 23);
+            this.ScailingConst.TabIndex = 29;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LavenderBlush;
             this.ClientSize = new System.Drawing.Size(1571, 676);
+            this.Controls.Add(this.ScailingConst);
+            this.Controls.Add(this.axis);
+            this.Controls.Add(this.Scalling);
+            this.Controls.Add(this.Rotation);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numericUpDown2);
@@ -358,6 +409,10 @@
         private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button Rotation;
+        private System.Windows.Forms.Button Scalling;
+        private System.Windows.Forms.ComboBox axis;
+        private System.Windows.Forms.TextBox ScailingConst;
     }
 }
 
