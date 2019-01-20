@@ -29,8 +29,8 @@ namespace obrabotka
             if (open_dialog.ShowDialog() == DialogResult.OK)
             {
                 image = new Bitmap(open_dialog.FileName);
-                //Bitmap bmp = new Bitmap(image, new Size(200, 250 * image.Size.Height / image.Size.Width));
-                Bitmap bmp = new Bitmap(image, image.Size.Height , image.Size.Width);
+                Bitmap bmp = new Bitmap(image, new Size(400, 450 * image.Size.Height / image.Size.Width));
+                //Bitmap bmp = new Bitmap(image, image.Size.Height , image.Size.Width);
                 image_mass = new byte[bmp.Width, bmp.Height];
                 for (int x = 0; x < bmp.Width; x++)
                 {
@@ -79,53 +79,7 @@ namespace obrabotka
                                                          
         }
 
-        private void gen_graph(byte[,] massive)
-        {
-            int pixel = BasicImage.Height * BasicImage.Width;
-
-            byte[] result_mass = new byte[300];
-            for (int i = 0; i < 300; i++)
-            {
-                result_mass[i] = 0;
-            }
-            //foreach (byte pix in image_mass)
-            //{
-            //    result_mass[pix] += 1;
-            //}
-            for (int x = 0; x < BasicImage.Width; x++)
-            {
-                for (int y = 0; y < BasicImage.Height-1; y++)
-                {
-                    byte op = image_mass[x, y];
-                    result_mass[op] += 1;
-                }
-            }
-            Graphics g = graph.CreateGraphics();
-            byte max_el = 0;
-            for (int i = 0; i < 256; i++)
-            {
-                if (result_mass[i] > max_el)
-                {
-                    max_el = result_mass[i];
-                }
-            }
-            for (int j = 0; j < 256; j++)
-            {
-                g.DrawLine(new Pen(Brushes.Black, 1), new Point(j, 0), new Point(j, result_mass[j]*250 / max_el));
-            }
-            
-        }
-
-        private void graph_Click(object sender, EventArgs e)
-        {
-            for (int x = 0; x < BasicImage.Width; x++)
-            {
-                for (int y = 0; y < BasicImage.Height; y++)
-                {
-                    
-                }
-            }
-        }
+        
 
         private void Enlightenment_Click(object sender, EventArgs e)
         {
@@ -541,7 +495,9 @@ namespace obrabotka
                     }
                     min = proverka(min);
                     max = proverka(max);
-                    new_image.SetPixel(i, j, image_mass[i, j ] >= (max+min)/2+50 ? Color.Black : Color.White);
+                    new_image.SetPixel(i, j, image_mass[i, j ] >= (max+min)/2+10 ? Color.Black : Color.White);
+                    min = 255;
+                    max = 0;
                 }
             }
             newImage.Image = new_image;

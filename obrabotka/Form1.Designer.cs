@@ -33,7 +33,6 @@
             this.Upload = new System.Windows.Forms.Button();
             this.PixelBar = new System.Windows.Forms.TrackBar();
             this.PixelBar_value = new System.Windows.Forms.Label();
-            this.graph = new System.Windows.Forms.PictureBox();
             this.Binarization = new System.Windows.Forms.Button();
             this.Gamma = new System.Windows.Forms.Button();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
@@ -49,7 +48,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.BasicImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.newImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PixelBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.graph)).BeginInit();
             this.SuspendLayout();
             // 
             // BasicImage
@@ -57,16 +55,16 @@
             this.BasicImage.Location = new System.Drawing.Point(240, 17);
             this.BasicImage.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.BasicImage.Name = "BasicImage";
-            this.BasicImage.Size = new System.Drawing.Size(375, 308);
+            this.BasicImage.Size = new System.Drawing.Size(639, 440);
             this.BasicImage.TabIndex = 0;
             this.BasicImage.TabStop = false;
             // 
             // newImage
             // 
-            this.newImage.Location = new System.Drawing.Point(641, 17);
+            this.newImage.Location = new System.Drawing.Point(946, 17);
             this.newImage.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.newImage.Name = "newImage";
-            this.newImage.Size = new System.Drawing.Size(375, 308);
+            this.newImage.Size = new System.Drawing.Size(698, 444);
             this.newImage.TabIndex = 1;
             this.newImage.TabStop = false;
             // 
@@ -87,7 +85,7 @@
             // PixelBar
             // 
             this.PixelBar.LargeChange = 10;
-            this.PixelBar.Location = new System.Drawing.Point(224, 352);
+            this.PixelBar.Location = new System.Drawing.Point(256, 520);
             this.PixelBar.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.PixelBar.Maximum = 255;
             this.PixelBar.Minimum = -255;
@@ -101,23 +99,13 @@
             // PixelBar_value
             // 
             this.PixelBar_value.AutoSize = true;
-            this.PixelBar_value.Location = new System.Drawing.Point(649, 331);
+            this.PixelBar_value.Location = new System.Drawing.Point(638, 499);
             this.PixelBar_value.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.PixelBar_value.Name = "PixelBar_value";
             this.PixelBar_value.Size = new System.Drawing.Size(169, 17);
             this.PixelBar_value.TabIndex = 5;
             this.PixelBar_value.Text = "Текущее значение: 0";
             this.PixelBar_value.Click += new System.EventHandler(this.PixelBar_value_Click);
-            // 
-            // graph
-            // 
-            this.graph.Location = new System.Drawing.Point(1046, 17);
-            this.graph.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
-            this.graph.Name = "graph";
-            this.graph.Size = new System.Drawing.Size(384, 310);
-            this.graph.TabIndex = 6;
-            this.graph.TabStop = false;
-            this.graph.Click += new System.EventHandler(this.graph_Click);
             // 
             // Binarization
             // 
@@ -147,7 +135,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(261, 444);
+            this.button1.Location = new System.Drawing.Point(256, 610);
             this.button1.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(132, 40);
@@ -158,7 +146,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(423, 444);
+            this.button2.Location = new System.Drawing.Point(424, 610);
             this.button2.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(132, 40);
@@ -169,7 +157,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(588, 444);
+            this.button3.Location = new System.Drawing.Point(599, 610);
             this.button3.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(132, 40);
@@ -180,7 +168,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(759, 444);
+            this.button4.Location = new System.Drawing.Point(774, 610);
             this.button4.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(132, 40);
@@ -191,7 +179,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(921, 444);
+            this.button5.Location = new System.Drawing.Point(946, 610);
             this.button5.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(132, 40);
@@ -202,7 +190,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(1082, 444);
+            this.button6.Location = new System.Drawing.Point(1120, 610);
             this.button6.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(132, 40);
@@ -216,7 +204,7 @@
             this.button7.Cursor = System.Windows.Forms.Cursors.AppStarting;
             this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button7.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button7.Location = new System.Drawing.Point(23, 420);
+            this.button7.Location = new System.Drawing.Point(12, 598);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(205, 64);
             this.button7.TabIndex = 19;
@@ -249,7 +237,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LavenderBlush;
-            this.ClientSize = new System.Drawing.Size(1485, 524);
+            this.ClientSize = new System.Drawing.Size(1838, 727);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.adaptive_binarization);
             this.Controls.Add(this.button7);
@@ -261,7 +249,6 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.Gamma);
             this.Controls.Add(this.Binarization);
-            this.Controls.Add(this.graph);
             this.Controls.Add(this.PixelBar_value);
             this.Controls.Add(this.PixelBar);
             this.Controls.Add(this.Upload);
@@ -275,7 +262,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.BasicImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.newImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PixelBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.graph)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -288,7 +274,6 @@
         private System.Windows.Forms.Button Upload;
         private System.Windows.Forms.TrackBar PixelBar;
         private System.Windows.Forms.Label PixelBar_value;
-        private System.Windows.Forms.PictureBox graph;
         private System.Windows.Forms.Button Binarization;
         private System.Windows.Forms.Button Gamma;
         private System.Windows.Forms.ColorDialog colorDialog1;
