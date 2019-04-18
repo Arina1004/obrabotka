@@ -37,7 +37,6 @@ namespace obrabotka
             {
                 image = new Bitmap(open_dialog.FileName);
                 Bitmap bmp = new Bitmap(image, new Size(600, 440 * image.Size.Height / image.Size.Width));
-                //Bitmap bmp = new Bitmap(image, image.Size.Height , image.Size.Width);
                 image_mass = new byte[bmp.Width, bmp.Height];
                 for (int x = 0; x < bmp.Width; x++)
                 {
@@ -48,7 +47,7 @@ namespace obrabotka
                     }
                 }
                 BasicImage.Image = bmp;
-                //gen_graph(image_mass);
+         
                 BasicImage.Invalidate();
             }
         }
@@ -417,24 +416,21 @@ namespace obrabotka
                 }
             }
         }
-        private int getD(int cr, int cl, int cu, int cd, int cld, int clu, int cru, int crd, int[,] matrix)
-        {
-            return Math.Abs(matrix[0, 0] * clu + matrix[0, 1] * cu + matrix[0, 2] * cru
-               + matrix[1, 0] * cl + matrix[1, 2] * cr
-                  + matrix[2, 0] * cld + matrix[2, 1] * cd + matrix[2, 2] * crd);
-        }
+      
         private int getMaxD(int cr, int cl, int cu, int cd, int cld, int clu, int cru, int crd)
         {
             int max = int.MinValue;
-            for (int i = 0; i < templates.Count; i++)
+            for (int i = 0; i < matrix.Count; i++)
             {
-                int newVal = getD(cr, cl, cu, cd, cld, clu, cru, crd, templates[i]);
+                int newVal = Math.Abs(matrix[i][0, 0] * clu + matrix[i][0, 1] * cu + matrix[i][0, 2] * cru
+               + matrix[i][1, 0] * cl + matrix[i][1, 2] * cr
+                  + matrix[i][2, 0] * cld + matrix[i][2, 1] * cd + matrix[i][2, 2] * crd);
                 if (newVal > max)
                     max = newVal;
             }
             return max;
         }
-        private List<int[,]> templates = new List<int[,]>
+        private List<int[,]> matrix = new List<int[,]>
         {
            new int[,] {{ -3, -3, 5 }, { -3, 0, 5 }, { -3, -3, 5 } },
            new int[,] {{ -3, 5, 5 }, { -3, 0, 5 }, { -3, -3, -3 } },
@@ -459,16 +455,7 @@ namespace obrabotka
             {
                 for (int j = 1; j < BasicImage.Image.Height - 1; j++)
                 {
-                    
-                    Color cr = old.GetPixel(i + 1, j);
-                    Color cl = old.GetPixel(i - 1, j);
-                    Color cu = old.GetPixel(i, j - 1);
-                    Color cd = old.GetPixel(i, j + 1);
-                    Color cld = old.GetPixel(i - 1, j + 1);
-                    Color clu = old.GetPixel(i - 1, j - 1);
-                    Color crd = old.GetPixel(i + 1, j + 1);
-                    Color cru = old.GetPixel(i + 1, j - 1);
-                    int power = getMaxD(cr.R, cl.R, cu.R, cd.R, cld.R, clu.R, cru.R, crd.R);
+                    int power = getMaxD(old.GetPixel(i + 1, j).R, old.GetPixel(i - 1, j).R, old.GetPixel(i, j - 1).R, old.GetPixel(i, j + 1).R, old.GetPixel(i - 1, j + 1).R, old.GetPixel(i - 1, j - 1).R, old.GetPixel(i + 1, j - 1).R, old.GetPixel(i + 1, j + 1).R);
                     power = proverka(power);
                     ret.SetPixel(i, j, Color.FromArgb(power, power, power));
 
@@ -514,7 +501,7 @@ namespace obrabotka
                     }
                     min = proverka(min);
                     max = proverka(max);
-                    new_image.SetPixel(i, j, image_mass[i, j] >= (max + min) / 2 + c ? Color.Black : Color.White);
+                    new_image.SetPixel(i, j, image_mass[i, j] > (max + min) / 2 + c ?   Color.White :Color.Black);
                     min = 255;
                     max = 0;
                 }
@@ -613,13 +600,13 @@ namespace obrabotka
 
         private double determinant(List<double> matrix)
         {
-            double deter = matrix[0] * matrix[4] * matrix[8] -
+            double det = matrix[0] * matrix[4] * matrix[8] -
                 matrix[0] * matrix[7] * matrix[5] +
                 matrix[1] * matrix[5] * matrix[6] -
                 matrix[1] * matrix[8] * matrix[3] +
                 matrix[2] * matrix[3] * matrix[7] -
                 matrix[2] * matrix[6] * matrix[4];
-            return deter;
+            return det;
         }
 
         private void axis_SelectedIndexChanged(object sender, EventArgs e)
@@ -652,50 +639,31 @@ namespace obrabotka
             for (int x = 0; x < newWidth; x++)
             {
                 for (int y = 0; y < newHeight; y++)
-                { // выделение начальные координаты
+                { 
                     double scaledX = start.X + x / ScConst;
                     double scaledY = start.Y + y / ScConst;
                     int flooredX = (int)(scaledX);
                     int flooredY = (int)(scaledY);
-
-                    List<double> iter = new List<double>()
-                        {
-                            parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX)), Math.Min(old_image.Height-1,Math.Max(0,flooredY-1))).R,
-                            flooredX+1, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+1)), Math.Min(old_image.Height-1,Math.Max(0,flooredY-1))).R,
-                            flooredX+2, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+2)), Math.Min(old_image.Height-1,Math.Max(0,flooredY-1))).R, scaledX),
-
-                            parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX)), Math.Min(old_image.Height-1,Math.Max(0,flooredY))).R,
-                            flooredX+1, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+1)), Math.Min(old_image.Height-1,Math.Max(0,flooredY))).R,
-                            flooredX+2, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+2)), Math.Min(old_image.Height-1,Math.Max(0,flooredY))).R, scaledX),
-
-                            parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX)), Math.Min(old_image.Height-1,Math.Max(0,flooredY+1))).R,
-                            flooredX+1, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+1)), Math.Min(old_image.Height-1,Math.Max(0,flooredY+1))).R,
-                            flooredX+2, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+2)), Math.Min(old_image.Height-1,Math.Max(0,flooredY+1))).R, scaledX),
-
-                            parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX)), Math.Min(old_image.Height-1,Math.Max(0,flooredY-1))).G,
-                            flooredX+1, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+1)), Math.Min(old_image.Height-1,Math.Max(0,flooredY-1))).G,
-                            flooredX+2, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+2)), Math.Min(old_image.Height-1,Math.Max(0,flooredY-1))).G, scaledX),
-
-                            parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX)), Math.Min(old_image.Height-1,Math.Max(0,flooredY))).G,
-                            flooredX+1, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+1)), Math.Min(old_image.Height-1,Math.Max(0,flooredY))).G,
-                            flooredX+2, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+2)), Math.Min(old_image.Height-1,Math.Max(0,flooredY))).G, scaledX),
-
-                            parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX)), Math.Min(old_image.Height-1,Math.Max(0,flooredY+1))).G,
-                            flooredX+1, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+1)), Math.Min(old_image.Height-1,Math.Max(0,flooredY+1))).G,
-                            flooredX+2, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+2)), Math.Min(old_image.Height-1,Math.Max(0,flooredY+1))).G, scaledX),
-
-                            parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX)), Math.Min(old_image.Height-1,Math.Max(0,flooredY-1))).B,
-                            flooredX+1, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+1)), Math.Min(old_image.Height-1,Math.Max(0,flooredY-1))).B,
-                            flooredX+2, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+2)), Math.Min(old_image.Height-1,Math.Max(0,flooredY-1))).B, scaledX),
-
-                            parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX)), Math.Min(old_image.Height-1,Math.Max(0,flooredY))).B,
-                            flooredX+1, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+1)), Math.Min(old_image.Height-1,Math.Max(0,flooredY))).B,
-                            flooredX+2, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+2)), Math.Min(old_image.Height-1,Math.Max(0,flooredY))).B, scaledX),
-
-                            parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX)), Math.Min(old_image.Height-1,Math.Max(0,flooredY+1))).B,
-                            flooredX+1, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+1)), Math.Min(old_image.Height-1,Math.Max(0,flooredY+1))).B,
-                            flooredX+2, old_image.GetPixel(Math.Min(old_image.Width-1,Math.Max(0,flooredX+2)), Math.Min(old_image.Height-1,Math.Max(0,flooredY+1))).B, scaledX)
-                        };
+                    List<double> iter = new List<double>();
+                    for (int i = -1; i < 2 ; i++)
+                    {
+                        iter.Add(parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, flooredX)), Math.Min(old_image.Height - 1, Math.Max(0, flooredY + i))).R,
+                            flooredX + 1, old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, flooredX + 1)), Math.Min(old_image.Height - 1, Math.Max(0, flooredY + i))).R,
+                            flooredX + 2, old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, flooredX + 2)), Math.Min(old_image.Height - 1, Math.Max(0, flooredY + i))).R, scaledX));
+                    }
+                    for (int i = -1; i < 2; i++)
+                    {
+                        iter.Add(parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, flooredX)), Math.Min(old_image.Height - 1, Math.Max(0, flooredY + i))).G,
+                            flooredX + 1, old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, flooredX + 1)), Math.Min(old_image.Height - 1, Math.Max(0, flooredY + i))).G,
+                            flooredX + 2, old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, flooredX + 2)), Math.Min(old_image.Height - 1, Math.Max(0, flooredY + i))).G, scaledX));
+                    }
+                    for (int i = -1; i < 2; i++)
+                    {
+                        iter.Add(parabola(flooredX, old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, flooredX)), Math.Min(old_image.Height - 1, Math.Max(0, flooredY + i))).B,
+                            flooredX + 1, old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, flooredX + 1)), Math.Min(old_image.Height - 1, Math.Max(0, flooredY + i))).B,
+                            flooredX + 2, old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, flooredX + 2)), Math.Min(old_image.Height - 1, Math.Max(0, flooredY + i))).B, scaledX));
+                    }
+                  
                     Color c = new Color();
 
                     int R = (int)(parabola(flooredY, iter[0], flooredY + 1, iter[1], flooredY + 2, iter[2], scaledY));
@@ -716,6 +684,11 @@ namespace obrabotka
             newImage.Image = new_image;
         
     }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private double parabola(double x1, double y1, double x2, double y2,
             double x3, double y3, double x)
@@ -746,12 +719,6 @@ namespace obrabotka
             PixelBar.Minimum = -360;
             PixelBar.Maximum = 360;
             PixelBar_value.Text = String.Format("Текущее значение: {0}", (double)PixelBar.Value);
-            button1.Hide();
-            button2.Hide();
-            button3.Hide();
-            button4.Hide();
-            button5.Hide();
-            button6.Hide();
             axis.Show();
             ScailingConst.Hide();
 

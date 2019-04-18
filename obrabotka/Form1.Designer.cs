@@ -53,6 +53,9 @@
             this.Scalling = new System.Windows.Forms.Button();
             this.axis = new System.Windows.Forms.ComboBox();
             this.ScailingConst = new System.Windows.Forms.TextBox();
+            this.Circle = new System.Windows.Forms.Button();
+            this.fontDialog1 = new System.Windows.Forms.FontDialog();
+            this.textfordisplay = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.BasicImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.newImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PixelBar)).BeginInit();
@@ -229,7 +232,7 @@
             // 
             // adaptive_binarization
             // 
-            this.adaptive_binarization.Location = new System.Drawing.Point(15, 161);
+            this.adaptive_binarization.Location = new System.Drawing.Point(15, 162);
             this.adaptive_binarization.Name = "adaptive_binarization";
             this.adaptive_binarization.Size = new System.Drawing.Size(210, 44);
             this.adaptive_binarization.TabIndex = 20;
@@ -304,7 +307,7 @@
             // 
             // Rotation
             // 
-            this.Rotation.Location = new System.Drawing.Point(23, 473);
+            this.Rotation.Location = new System.Drawing.Point(15, 421);
             this.Rotation.Name = "Rotation";
             this.Rotation.Size = new System.Drawing.Size(202, 52);
             this.Rotation.TabIndex = 31;
@@ -313,7 +316,7 @@
             // 
             // Scalling
             // 
-            this.Scalling.Location = new System.Drawing.Point(23, 402);
+            this.Scalling.Location = new System.Drawing.Point(12, 348);
             this.Scalling.Name = "Scalling";
             this.Scalling.Size = new System.Drawing.Size(202, 55);
             this.Scalling.TabIndex = 27;
@@ -341,12 +344,31 @@
             this.ScailingConst.Size = new System.Drawing.Size(132, 23);
             this.ScailingConst.TabIndex = 29;
             // 
+            // Circle
+            // 
+            this.Circle.Location = new System.Drawing.Point(15, 499);
+            this.Circle.Name = "Circle";
+            this.Circle.Size = new System.Drawing.Size(198, 55);
+            this.Circle.TabIndex = 32;
+            this.Circle.Text = "Circle";
+            this.Circle.UseVisualStyleBackColor = true;
+            this.Circle.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // textfordisplay
+            // 
+            this.textfordisplay.Location = new System.Drawing.Point(620, 471);
+            this.textfordisplay.Name = "textfordisplay";
+            this.textfordisplay.Size = new System.Drawing.Size(125, 23);
+            this.textfordisplay.TabIndex = 33;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LavenderBlush;
             this.ClientSize = new System.Drawing.Size(1571, 676);
+            this.Controls.Add(this.textfordisplay);
+            this.Controls.Add(this.Circle);
             this.Controls.Add(this.ScailingConst);
             this.Controls.Add(this.axis);
             this.Controls.Add(this.Scalling);
@@ -413,6 +435,9 @@
         private System.Windows.Forms.Button Scalling;
         private System.Windows.Forms.ComboBox axis;
         private System.Windows.Forms.TextBox ScailingConst;
+        private System.Windows.Forms.Button Circle;
+        private System.Windows.Forms.FontDialog fontDialog1;
+        private System.Windows.Forms.TextBox textfordisplay;
     }
 }
 
