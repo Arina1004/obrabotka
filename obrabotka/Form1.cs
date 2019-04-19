@@ -805,18 +805,36 @@ namespace obrabotka
             }
 
 
-            for (int i = 0; i < len/2+1; i++)
+            for (int i = 50; i < len/2+1; i++)
             {
-                for (int a1 = 0; a1 < len; a1++)
+                for (int a1 = 100; a1 < len - 50; a1 = a1+50) {
 
-                    for (int b1 = 0; b1 < len; b1++)
-                    {
-                        if (A[a1, b1, i] > 4.9*i)
+                    for (int b1 = 100; b1 < len - 50; b1 = b1+50) { 
+                        int max = 0;
+                        int px = 0;
+                        int py = 0;
+                        for (int k = -50; k < 50; k++)
                         {
-                            //System.Console.Write(a1 + " " + b1 + "  " + i + " ");
-                            draw(a1, b1, i);
-                        }
+                            for (int m = -50; m < 50; m++)
+                            {
+                                {
+                                    if (A[a1 + k, b1 + m, i] > 4.9 * i && A[a1 + k, b1 + m, i] > max)
+                                    {
+                                        max = A[a1 + k, b1 + m, i];
+                                        px = a1 + k;
+                                        py = b1 + m;
+                                        //System.Console.Write(a1 + " " + b1 + "  " + i + " ");
+
+                                    }
+                                }
+                            }
+                         }
+                        if (max!=0) { 
+                            draw(px, py, i);
                     }
+
+                    }
+                }
             }
 
 
@@ -825,7 +843,7 @@ namespace obrabotka
         private void draw( int x, int y, int r) {
             Graphics e = Graphics.FromImage(newImage.Image);
 
-            e.DrawEllipse(Pens.Red, x, y, r, r);
+            e.DrawEllipse(Pens.Red, x-r, y-r, 2*r, 2*r);
         }
         private Bitmap gauss( Bitmap image) {
             int x = image.Width;
