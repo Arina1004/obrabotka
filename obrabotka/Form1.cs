@@ -14,6 +14,7 @@ namespace obrabotka
     public partial class Form1 : Form
     {
         private Point start, end, center;
+        Bitmap bmp;
         private Rectangle Rect = new Rectangle();
         private Brush selectionBrush = new SolidBrush(Color.FromArgb(128, 72, 145, 220));
         public Form1()
@@ -30,13 +31,13 @@ namespace obrabotka
 
         private void Upload_Click(object sender, EventArgs e)
         {
-            Bitmap image;
+
             OpenFileDialog open_dialog = new OpenFileDialog();
             open_dialog.Filter = "Image Files(*.BMP;*.JPG;*.GIF;*.PNG)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*";
             if (open_dialog.ShowDialog() == DialogResult.OK)
             {
-                image = new Bitmap(open_dialog.FileName);
-                Bitmap bmp = new Bitmap(image, new Size(600, 440 * image.Size.Height / image.Size.Width));
+                bmp = new Bitmap(open_dialog.FileName);
+                //Bitmap bmp = new Bitmap(image, new Size(600, 440 * image.Size.Height / image.Size.Width));
                 image_mass = new byte[bmp.Width, bmp.Height];
                 for (int x = 0; x < bmp.Width; x++)
                 {
@@ -448,6 +449,11 @@ namespace obrabotka
             PixelBar_value.Hide();
             axis.Hide();
             ScailingConst.Hide();
+           
+            newImage.Image = Kirsh();
+        }
+        private Bitmap Kirsh()
+        {
             Bitmap ret = new Bitmap(BasicImage.Image.Width, BasicImage.Image.Height);
             Bitmap old = (Bitmap)BasicImage.Image;
 
@@ -461,9 +467,8 @@ namespace obrabotka
 
                 }
             }
-            newImage.Image = ret;
+            return ret;
         }
-
         private void button8_Click_1(object sender, EventArgs e)
         {
             PixelBar.Hide();
@@ -685,11 +690,7 @@ namespace obrabotka
         
     }
 
-        private void button9_Click(object sender, EventArgs e)
-        {
-
-        }
-
+      
         private double parabola(double x1, double y1, double x2, double y2,
             double x3, double y3, double x)
         {
@@ -758,5 +759,80 @@ namespace obrabotka
             }
             newImage.Image = new_image;
         }
+        private void voting()
+        {
+            int x = BasicImage.Image.Width;
+            int y = BasicImage.Image.Height;
+            int len = (BasicImage.Image.Height > BasicImage.Image.Width) ? BasicImage.Image.Height : BasicImage.Image.Width;
+            int[,,] A = new int[len, len, len];
+            int a, b;
+            Bitmap image = Kirsh();
+
+            for (int i = 0; i < image.Width; i++)
+            {
+                for (int j = 0; j < image.Height; j++)
+                {
+                    image.SetPixel(i, j, image.GetPixel(i, j).GetBrightness() < 0.9 ? Color.Black : Color.White);
+                }
+            }
+            newImage.Image = image;
+            for (int i = 0; i < x; i++)
+            {
+                for (int j = 0; j < y; j++)
+                {
+                    //textfordisplay.Text =$"{image.GetPixel(i, j)}";
+                    if (image.GetPixel(i, j).R == 255)
+                    {
+                        for (int r = 10; r < len ; r++)
+                        {
+                            for (int t = 0; t < 360; t++)
+                            {
+                                a = (int)(i - r * Math.Cos(t * Math.PI / 180));
+                                b = (int)(j - r * Math.Sin(t * Math.PI / 180));
+
+                                if (a > 0 && b > 0 && a < x - 1 && b < y - 1)
+                                {
+
+                                    A[a, b, r] += 1;
+                                }
+
+
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            for (int i = 0; i < len; i++)
+            {
+                for (int a1 = 0; a1 < len; a1++)
+
+                    for (int b1 = 0; b1 < len; b1++)
+                    {
+                        if (A[a1, b1, i] > 4.9 * i)
+                        {
+                            //System.Console.Write(a1 + " " + b1 + "  " + i + " ");
+                            draw(a1, b1, i);
+                        }
+                    }
+            }
+
+
+        }
+
+        private void draw( int x, int y, int r) {
+            Graphics e = Graphics.FromImage(newImage.Image);
+
+            e.DrawEllipse(Pens.Red, x, y, r, r);
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            //newImage.Image = BasicImage.Image;
+            voting();
+        }
+
     }
+
 }
