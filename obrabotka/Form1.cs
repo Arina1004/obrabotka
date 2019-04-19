@@ -450,12 +450,13 @@ namespace obrabotka
             axis.Hide();
             ScailingConst.Hide();
            
-            newImage.Image = Kirsh();
-        }
-        private Bitmap Kirsh()
-        {
-            Bitmap ret = new Bitmap(BasicImage.Image.Width, BasicImage.Image.Height);
             Bitmap old = (Bitmap)BasicImage.Image;
+
+            newImage.Image = Kirsh(old);
+        }
+        private Bitmap Kirsh( Bitmap old)
+        {
+            Bitmap ret = new Bitmap(old.Width,old.Height);
 
             for (int i = 1; i < BasicImage.Image.Width - 1; i++)
             {
@@ -759,38 +760,37 @@ namespace obrabotka
             }
             newImage.Image = new_image;
         }
-        private void voting()
+        private void  voting(Bitmap image)
         {
-            int x = BasicImage.Image.Width;
-            int y = BasicImage.Image.Height;
-            int len = (BasicImage.Image.Height > BasicImage.Image.Width) ? BasicImage.Image.Height : BasicImage.Image.Width;
-            int[,,] A = new int[len, len, len];
+            int x = image.Width;
+            int y = image.Height;
+            int len = (y > x) ? y : x;
+            int[,,] A = new int[len, len, len/2+1];
             int a, b;
-            Bitmap image = Kirsh();
 
-            for (int i = 0; i < image.Width; i++)
-            {
-                for (int j = 0; j < image.Height; j++)
-                {
-                    image.SetPixel(i, j, image.GetPixel(i, j).GetBrightness() < 0.9 ? Color.Black : Color.White);
-                }
-            }
-            newImage.Image = image;
+            //for (int i = 0; i < image.Width; i++)
+            //{
+            //    for (int j = 0; j < image.Height; j++)
+            //    {
+            //        image.SetPixel(i, j, image.GetPixel(i, j).GetBrightness() < 0.9 ? Color.Black : Color.White);
+            //    }
+            //}
+            //newImage.Image = image;
             for (int i = 0; i < x; i++)
             {
                 for (int j = 0; j < y; j++)
                 {
                     //textfordisplay.Text =$"{image.GetPixel(i, j)}";
-                    if (image.GetPixel(i, j).R == 255)
+                    if (image.GetPixel(i, j).R >= 250)
                     {
-                        for (int r = 10; r < len ; r++)
+                        for (int r = 50; r < len/2 + 1; r++)
                         {
                             for (int t = 0; t < 360; t++)
                             {
                                 a = (int)(i - r * Math.Cos(t * Math.PI / 180));
                                 b = (int)(j - r * Math.Sin(t * Math.PI / 180));
 
-                                if (a > 0 && b > 0 && a < x - 1 && b < y - 1)
+                                if (a-r > 0 && b-r > 0 && a+r < x - 1 && b+r < y - 1)
                                 {
 
                                     A[a, b, r] += 1;
@@ -798,19 +798,20 @@ namespace obrabotka
 
 
                             }
+
                         }
                     }
                 }
             }
 
 
-            for (int i = 0; i < len; i++)
+            for (int i = 0; i < len/2+1; i++)
             {
                 for (int a1 = 0; a1 < len; a1++)
 
                     for (int b1 = 0; b1 < len; b1++)
                     {
-                        if (A[a1, b1, i] > 4.9 * i)
+                        if (A[a1, b1, i] > 4.9*i)
                         {
                             //System.Console.Write(a1 + " " + b1 + "  " + i + " ");
                             draw(a1, b1, i);
@@ -826,13 +827,52 @@ namespace obrabotka
 
             e.DrawEllipse(Pens.Red, x, y, r, r);
         }
+        private Bitmap gauss( Bitmap image) {
+            int x = image.Width;
+            int y = image.Height;
+            for (int i = 2; i < x-2; i++) {
+                for (int j = 2; j < y-2; j++) {
+                    int R = 0;
+                    int G = 0;
+                    int B = 0;
+                    for (int k = -2; k < 2; k++)
+                    {
+                        for (int m = -2; m < 2; m++)
+                        {
+                            R += matrix_kernel[2 + k,2 + m]*image.GetPixel(i+k, j+m).R;
+                            G += matrix_kernel[2 + k, 2 + m] * image.GetPixel(i + k, j + m).G;
+                            B += matrix_kernel[2 + k, 2 + m] * image.GetPixel(i + k, j + m).B;
+                        }
+                    }
+                    R = R / 273;
+                    G = G / 273;
+                    B = B / 273;
+                    R = proverka(R);
+                    G = proverka(G);
+                    B = proverka(B);
+                    image.SetPixel(i, j, Color.FromArgb(R, G, B));
+
+                }
+            }
+            return  image;
+        }
+
 
         private void button9_Click(object sender, EventArgs e)
         {
             //newImage.Image = BasicImage.Image;
-            voting();
+            //voting();
+            Bitmap old_image = (Bitmap)BasicImage.Image;
+            old_image = gauss(old_image);
+            old_image = Kirsh(old_image);
+            newImage.Image = old_image;
+            voting(old_image);
         }
+    
 
+        int[,] matrix_kernel = new int[,] { { 1, 4, 7, 4, 1 }, { 4, 16, 26, 16, 4 }, { 7, 26, 41, 26, 7 }, { 4, 16, 26, 16, 4 }, { 1, 4, 7, 4, 1 } };
+
+        
     }
 
 }
