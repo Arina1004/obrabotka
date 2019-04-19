@@ -781,7 +781,7 @@ namespace obrabotka
                 for (int j = 0; j < y; j++)
                 {
                     //textfordisplay.Text =$"{image.GetPixel(i, j)}";
-                    if (image.GetPixel(i, j).R >= 250)
+                    if (image.GetPixel(i, j).R >= 250 && image.GetPixel(i, j).G >= 250 && image.GetPixel(i, j).B >= 250)
                     {
                         for (int r = 50; r < len/2 + 1; r++)
                         {
@@ -803,19 +803,18 @@ namespace obrabotka
                     }
                 }
             }
-
-
+            int[,,] massiv = new int[len,len,len / 2 + 1];
             for (int i = 50; i < len/2+1; i++)
             {
-                for (int a1 = 100; a1 < len - 50; a1 = a1+50) {
+                for (int a1 = 70; a1 < len - 20; a1 = a1+20) {
 
-                    for (int b1 = 100; b1 < len - 50; b1 = b1+50) { 
+                    for (int b1 = 70; b1 < len - 20; b1 = b1+20) { 
                         int max = 0;
                         int px = 0;
                         int py = 0;
-                        for (int k = -50; k < 50; k++)
+                        for (int k = -20; k < 20; k++)
                         {
-                            for (int m = -50; m < 50; m++)
+                            for (int m = -20; m < 20; m++)
                             {
                                 {
                                     if (A[a1 + k, b1 + m, i] > 4.9 * i && A[a1 + k, b1 + m, i] > max)
@@ -829,13 +828,37 @@ namespace obrabotka
                                 }
                             }
                          }
-                        if (max!=0) { 
-                            draw(px, py, i);
-                    }
+                        massiv[px,py,i] = max;
+
 
                     }
                 }
             }
+            for (int i = 60; i < len / 2 - 9 ; i=i+10) {
+                for (int a1 = 50; a1 < len; a1++)
+                {
+
+                    for (int b1 = 50; b1 < len ; b1++)
+                    {
+                        int max = 0;
+                        int r = 0;
+                        for (int k = -10; k < 10; k++)
+                        {
+                                if (massiv[a1, b1, i+k] != 0 && massiv[a1, b1, i+k] > max)
+                                {
+                                    r = k;
+                                    max = massiv[a1, b1, i+r];
+                                }
+                        }
+                        if (max != 0)
+                        {
+                            draw(a1, b1, i+r);
+                        }
+                    }
+                }
+            }
+
+               
 
 
         }
