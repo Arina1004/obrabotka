@@ -712,70 +712,142 @@ namespace obrabotka
             return (a * x * x + b * x + c);
         }
 
+        //private void Rotation_Click(object sender, EventArgs e)
+        //{
+        //    //параметры элементов
+        //    flag = "Rotation";
+        //    PixelBar.Show();
+        //    PixelBar_value.Show();
+        //    PixelBar.Minimum = -360;
+        //    PixelBar.Maximum = 360;
+        //    PixelBar_value.Text = String.Format("Текущее значение: {0}", (double)PixelBar.Value);
+        //    axis.Show();
+        //    ScailingConst.Hide();
+
+        //    if (Rect.Width == 0 || Rect.Height == 0)
+        //    {
+        //        return;
+        //    }
+
+        //    if (axis.SelectedItem.ToString() == "Центр")
+        //    {
+        //        center.X = start.X + (int)(Rect.Width / 2);
+        //        center.Y = start.Y + (int)(Rect.Height / 2);
+        //    }
+
+        //    Bitmap new_image = new Bitmap(BasicImage.Image);
+        //    Bitmap old_image = (Bitmap)BasicImage.Image;
+
+        //    double angle = (double)PixelBar.Value * 0.01745;
+
+        //    for (int y = 0; y <= old_image.Height; ++y)
+        //    {
+        //        for (int x = 0; x <= old_image.Width; ++x)
+        //        {
+        //            int newX = (int)Math.Round(center.X +
+        //                (x - center.X) * Math.Cos(angle) -
+        //                (y - center.Y) * Math.Sin(angle));
+        //            int newY = (int)Math.Round(center.Y +
+        //                (x - center.X) * Math.Sin(angle) +
+        //                (y - center.Y) * Math.Cos(angle));
+
+        //            if ((start.X <= newX) && (end.X >= newX) && (newY >= start.Y) && (newY <= end.Y))
+        //            {
+        //                new_image.SetPixel(Math.Min(old_image.Width - 1, Math.Max(0, x)), Math.Min(old_image.Height - 1, Math.Max(0, y)),
+        //                    old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, newX)), Math.Min(old_image.Height - 1, Math.Max(0, newY))));
+        //            }
+        //        }
+        //    }
+        //    newImage.Image = new_image;
+        //}
         private void Rotation_Click(object sender, EventArgs e)
         {
-            //параметры элементов
-            flag = "Rotation";
-            PixelBar.Show();
-            PixelBar_value.Show();
-            PixelBar.Minimum = -360;
-            PixelBar.Maximum = 360;
-            PixelBar_value.Text = String.Format("Текущее значение: {0}", (double)PixelBar.Value);
-            axis.Show();
+            flag = "Line";
+            PixelBar.Hide();
+            PixelBar_value.Hide();
+            button1.Hide();
+            button2.Hide();
+            button3.Hide();
+            button4.Hide();
+            button5.Hide();
+            button6.Hide();
+            axis.Hide();
             ScailingConst.Hide();
+            numericUpDown1.Hide();
+            numericUpDown2.Hide();
 
-            if (Rect.Width == 0 || Rect.Height == 0)
-            {
-                return;
-            }
+            label1.Text = "start";
 
-            if (axis.SelectedItem.ToString() == "Центр")
-            {
-                center.X = start.X + (int)(Rect.Width / 2);
-                center.Y = start.Y + (int)(Rect.Height / 2);
-            }
-
-            Bitmap new_image = new Bitmap(BasicImage.Image);
+            Bitmap new_image = Kirsh((Bitmap)BasicImage.Image);
             Bitmap old_image = (Bitmap)BasicImage.Image;
-
-            double angle = (double)PixelBar.Value * 0.01745;
-
-            for (int y = 0; y <= old_image.Height; ++y)
+            int halfHoughWidth = (int)Math.Sqrt(old_image.Width / 2 * old_image.Width / 2 + old_image.Height / 2 * old_image.Height / 2);
+            int houghWidth = halfHoughWidth * 2;
+            int[,] houghMap = new int[181, houghWidth];
+            for (int i = 0; i < 181; i++)
             {
-                for (int x = 0; x <= old_image.Width; ++x)
+                for (int j = 0; j < houghWidth; j++)
                 {
-                    int newX = (int)Math.Round(center.X +
-                        (x - center.X) * Math.Cos(angle) -
-                        (y - center.Y) * Math.Sin(angle));
-                    int newY = (int)Math.Round(center.Y +
-                        (x - center.X) * Math.Sin(angle) +
-                        (y - center.Y) * Math.Cos(angle));
+                    houghMap[i, j] = 0;
+                }
+            }
 
-                    if ((start.X <= newX) && (end.X >= newX) && (newY >= start.Y) && (newY <= end.Y))
+            for (int x = 0; x < old_image.Width; x++)
+            {
+                for (int y = 0; y < old_image.Height; y++)
+                {
+                    Color c = old_image.GetPixel(x, y);
+                    if (c.R == 255 && c.B == 255 && c.G == 255)
                     {
-                        new_image.SetPixel(Math.Min(old_image.Width - 1, Math.Max(0, x)), Math.Min(old_image.Height - 1, Math.Max(0, y)),
-                            old_image.GetPixel(Math.Min(old_image.Width - 1, Math.Max(0, newX)), Math.Min(old_image.Height - 1, Math.Max(0, newY))));
+                        for (int theta = 0; theta <= 180; theta++)
+                        {
+                            int radius = (int)Math.Round(Math.Cos(theta) * x + y * Math.Sin(theta));
+                            if ((radius < 0) || (radius >= houghWidth))
+                                continue;
+                            houghMap[theta, radius]++;
+                        }
                     }
                 }
             }
+            int max_el = houghMap[0, 0];
+            int max_rad = 0;
+            int max_theta = 0;
+            for (int i = 0; i < 181; i++)
+            {
+                for (int j = 0; j < houghWidth; j++)
+                {
+                    if (max_el < houghMap[i, j])
+                    {
+                        max_el = houghMap[i, j];
+                        max_theta = i;
+                        max_rad = j;
+                    }
+                }
+            }
+            int first_x = 0;
+            int first_y = (int)(((-Math.Cos(max_theta) / Math.Sin(max_theta)) * first_x) + (max_rad / Math.Sin(max_theta)));
+            int sec_x = old_image.Width;
+            int sec_y = (int)(((-Math.Cos(max_theta) / Math.Sin(max_theta)) * sec_x) + (max_rad / Math.Sin(max_theta)));
+            int second_y = 0;
+            int second_x = (int)(((-Math.Sin(max_theta) / Math.Cos(max_theta)) * second_y) + (max_rad / Math.Cos(max_theta)));
+            Graphics line = Graphics.FromImage(new_image);
+            Pen col = new Pen(Color.Red, 5); label1.Text = $"{first_x}";
+          
+            line.DrawLine(col, first_x, first_y, sec_x, sec_y);
             newImage.Image = new_image;
+            char fy = (char)(first_y);
+            char fx = (char)(first_x);
+            char sx = (char)(second_x);
+            char sy = (char)(second_y);
+
         }
+
         private void  voting(Bitmap image)
         {
             int x = image.Width;
             int y = image.Height;
             int len = (y > x) ? y : x;
             int[,,] A = new int[len, len, len/2+1];
-            int a, b;
 
-            //for (int i = 0; i < image.Width; i++)
-            //{
-            //    for (int j = 0; j < image.Height; j++)
-            //    {
-            //        image.SetPixel(i, j, image.GetPixel(i, j).GetBrightness() < 0.9 ? Color.Black : Color.White);
-            //    }
-            //}
-            //newImage.Image = image;
             for (int i = 0; i < x; i++)
             {
                 for (int j = 0; j < y; j++)
@@ -783,14 +855,16 @@ namespace obrabotka
                     //textfordisplay.Text =$"{image.GetPixel(i, j)}";
                     if (image.GetPixel(i, j).R >= 250 && image.GetPixel(i, j).G >= 250 && image.GetPixel(i, j).B >= 250)
                     {
-                        for (int r = 50; r < len/2 + 1; r++)
+                        int a, b;
+
+                        for (int r = 55; r < 80; r++)
                         {
                             for (int t = 0; t < 360; t++)
                             {
                                 a = (int)(i - r * Math.Cos(t * Math.PI / 180));
                                 b = (int)(j - r * Math.Sin(t * Math.PI / 180));
 
-                                if (a-r > 0 && b-r > 0 && a+r < x - 1 && b+r < y - 1)
+                                if (a-r > 0 && b-r > 0 && a+r < x  && b+r < y )
                                 {
 
                                     A[a, b, r] += 1;
@@ -803,62 +877,122 @@ namespace obrabotka
                     }
                 }
             }
-            int[,,] massiv = new int[len,len,len / 2 + 1];
-            for (int i = 50; i < len/2+1; i++)
+            List<List<int>> maxHoughMap = new List<List<int>>();
+            int[] max_radius = new int[80];
+            int max_a = 0;
+            int max_b = 0;
+            int isf = 0;
+            SortedSet<List<int>> seq = new SortedSet<List<int>>();
+            for (int a = 0; a < x; a++)
             {
-                for (int a1 = 70; a1 < len - 20; a1 = a1+20) {
-
-                    for (int b1 = 70; b1 < len - 20; b1 = b1+20) { 
-                        int max = 0;
-                        int px = 0;
-                        int py = 0;
-                        for (int k = -20; k < 20; k++)
+                for (int b = 0; b < y; b++)
+                {
+                    for (int radius = 10; radius < 80; radius++)
+                    {
+                        if (A[ a, b,radius] > 4.9 * radius)
                         {
-                            for (int m = -20; m < 20; m++)
+                            if (a > radius && b > radius && a < x- radius && b <y - radius)
                             {
+                                if (max_a == a && max_b == b)
                                 {
-                                    if (A[a1 + k, b1 + m, i] > 4.9 * i && A[a1 + k, b1 + m, i] > max)
-                                    {
-                                        max = A[a1 + k, b1 + m, i];
-                                        px = a1 + k;
-                                        py = b1 + m;
-                                        //System.Console.Write(a1 + " " + b1 + "  " + i + " ");
+                                    continue;
+                                }
+                                if (max_a == 0)
+                                {
+                                    isf += 1;
+                                    max_a = a;
+                                }
+                                if (max_b == 0)
+                                {
+                                    max_b = b;
+                                  
+                                    List<int> point = new List<int>() { max_a, max_b };
+                                    seq.Add(point);
+                                    List<int> coin = new List<int>() { radius, max_a, max_b };
+                                    //textfordisplay.Text = $"{seq.Contains(point)}";
+                                    //if (!seq.Contains(point))
+                                    //{
+                                        maxHoughMap.Add(coin);
+                                        max_radius[radius]++;
+                                    //}
+                                }
+                                if (Math.Abs(max_a - a) <= 20 && Math.Abs(max_b - b) <= 20)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    max_a = 0;
+                                    max_b = 0;
+                                    //List<int> point = new List<int>() { max_a, max_b };
+                                    //seq.Add(point);
+                                    List<int> coin = new List<int>() { radius, a, b };
+                                    //if (!seq.Contains(point))
+                                    //{
+                                        maxHoughMap.Add(coin);
+                                        max_radius[radius]++;
+                                    //}
 
-                                    }
                                 }
                             }
-                         }
-                        massiv[px,py,i] = max;
-
-
+                        }
                     }
                 }
             }
-            for (int i = 60; i < len / 2 - 9 ; i=i+10) {
-                for (int a1 = 50; a1 < len; a1++)
+            int listSize = maxHoughMap.Count;
+            int coin_1 = 0;
+            int coin_2 = 0;
+            int coin_5 = 0;
+            label1.Text = $"{listSize}";
+            for (int i = 0; i < listSize; i++)
+            {
+                int radius = maxHoughMap[i][0];
+                int a = maxHoughMap[i][1];
+                int b = maxHoughMap[i][2];
+                Graphics circle = Graphics.FromImage(newImage.Image);
+                Pen col = new Pen(Color.Red, 3);
+                circle.DrawEllipse(col, a - radius, b - radius, radius * 2, radius * 2);
+            }
+            int flag1 = 5;
+            for (int i = 79; i > 55; i--)
+            {
+                if (max_radius[i] > 0 && flag1 == 5)
                 {
-
-                    for (int b1 = 50; b1 < len ; b1++)
+                    for (int j = 0; j < 5; j++)
                     {
-                        int max = 0;
-                        int r = 0;
-                        for (int k = -10; k < 10; k++)
-                        {
-                                if (massiv[a1, b1, i+k] != 0 && massiv[a1, b1, i+k] > max)
-                                {
-                                    r = k;
-                                    max = massiv[a1, b1, i+r];
-                                }
-                        }
-                        if (max != 0)
-                        {
-                            draw(a1, b1, i+r);
-                        }
+                        coin_5 += max_radius[i - j];
                     }
-                }
-            }
+                    flag1 = 2;
+                    i -= 5;
 
-               
+                }
+                if (max_radius[i] > 0 && flag1 == 2)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        coin_2 += max_radius[i - j];
+                    }
+                    flag1 = 1;
+                    i -= 5;
+
+                }
+                if (max_radius[i] > 0 && flag1 == 1)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        coin_1 += max_radius[i - j];
+                    }
+                    break;
+
+                }
+
+            }
+            textfordisplay.Text = $"coin 1: {coin_1}, coin 2: {coin_2},coin 5: {coin_5} ";
+            //label2.Text = $"coin 1: {coin_1} ";
+            ////label3.Text = $"coin 2: {coin_2} ";
+            ////label4.Text = $"coin 5: {coin_5} ";
+
+
 
 
         }
